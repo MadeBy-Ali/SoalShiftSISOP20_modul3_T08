@@ -37,6 +37,35 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
                  *  mengkategorikan seluruh file yang ada di working directory
 
 **Pembahasan:**\
+
+``` bash
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <dirent.h>
+#include <pthread.h>
+#include <errno.h>
+```
+* library tipe data khusus (e.g. pid_t)
+* LIbrary untuk
+* library untuk fungsi input-output (e.g. printf(), sprintf())
+* library untuk fungsi umum (e.g. exit(), atoi())
+* library untuk melakukan system call kepada kernel linux (e.g. fork())
+* Library untuk 
+* Library untuk
+* Library untuk
+* Library untuk merepresentasikan directory stream dan struct dirent(e.g. struct dirent *entry)
+* Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
+* Library untuk error handling (e.g. errno)
+
+
+
+
+
 Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
 Fungsi *getFileName*
@@ -100,8 +129,25 @@ char *getExtension(char *fName, char buff[]) {
   }
 }
 ```
-* Fungsi didefinisikan menggunakan satu parameter yaitu `buff[]` untuk menyimpan hasil dari fungsi ini sendiri,
-Fungsi ini melakukan pembuatan directory baru dengan 
+* Fungsi didefinisikan menggunakan satu parameter yaitu `buff[]` untuk menyimpan hasil dari fungsi ini sendiri
+* Disini pembuatan directory baru akan dilakukan jika ada sebuah error yang dihasilakan oleh fungsi **opendir()**, lalu **if** akan melakukan error handling.
+* Fungsi ini melakukan pembuatan directory baru menggunakan fungsi **mkdir()** dengan nama yang di return `buffer` dan permission `0775` atau `read and execute` lalu akan di tutup kembali.
+
+
+``` bash
+void *routine(void* arg) {
+  char buffExt[100];
+  char buffFileName[1337];
+  char buffFrom[1337];
+  char buffTo[1337];
+  char cwd[1337];
+  getcwd(cwd, sizeof(cwd));
+  strcpy(buffFrom, (char *) arg);
+}
+```
+* 
+
+
 
 
 
