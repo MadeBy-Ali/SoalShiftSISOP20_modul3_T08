@@ -116,7 +116,7 @@ char *getExtension(char *fName, char buff[]) {
 * Pengecekan untuk jumlah `counter` yang kurang atau kondisi dimana file tidak ada ekstensi
 * Untuk file yang tidak memiliki ekstensi, `buffer` akan berisi `unknown`
 
-Fungsi *directory Checking*
+**Fungsi *directory Checking***
 ``` bash
  void dirChecking(char buff[]) {
   DIR *dr = opendir(buff);
@@ -144,7 +144,29 @@ void *routine(void* arg) {
 ```
 * Pada Routine ini kami mendefinisikan lima `buffer` yang masih masingnya akan menghandle: `ext` `fileName`
 `path input` `path to` dan `cwd`
+* Dimana `buffer` untuk `cwd` akan langsung diisi dengan fungsi **getcwd()** yang mereturn 
+current working directory beserta sizenya dan untuk `from` atau argumen path yang diinpukan user 
+akan diambil menggunakan **(char *)arg**
+
+``` bash
+  if (access(buffFrom, F_OK) == -1) {
+    printf("File %s tidak ada\n", buffFrom);
+    pthread_exit(0);
+  }
+  DIR* dir = opendir(buffFrom);
+  if (dir) {
+    printf("file %s berupa folder\n", buffFrom);
+    pthread_exit(0);
+  }
+  closedir(dir);
+```
+* Disini program akan melakukan mengecek eksistensi dan bentuk dari file/dir yang diinputkan oleh user
+dari argumen yang diinputkan user menggunakan fungsi: 
+    * **access()** dengan source `buffFrom` & `F_OK` sebagai `amode` untuk eksistensi. Jika argumen yang diinputkan
+      tidak sesuai makan ditampilkan error message dan `thread` akan diselesaikan menggunakan **pthread_exit(0)**
 * 
+
+
 
 
 
