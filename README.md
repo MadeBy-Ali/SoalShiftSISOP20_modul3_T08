@@ -39,6 +39,7 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
 **Pembahasan:**\
 Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
+**getFileName**
 ``` bash
 char *getFileName(char *fName, char buff[]) {
   char *token = strtok(fName, "/");
@@ -48,14 +49,14 @@ char *getFileName(char *fName, char buff[]) {
   }
 }
 ```
+* Fungsi didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
+  * Selanjutnya pada nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
+  * Lalu **while loop** akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
+  * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token selanjutnya hingga akhir dari input.
 
-* Pada bagian `awk -F "\t" 'NR > 1 {seen[$13]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv`, akan menjalankan perintah awk dengan **"tab"** sebagai field separatornya.
-  * Dalam block **BODY**: akan mengecek dari baris kedua dari `Sample-Superstore.tsv` lalu akan menambahkan jumlah dari **profit**(`$NF`) kedalam array `seen` dengan menggunakan **region**(`$13`) sebagai index dari array tersebut.
-  * Dalam block **END**: akan melakukan loop untuk setiap index dari array `seen`, lalu setiap index dan nilainya akan diprint menggunakan `printf "%s?$f\n", i, seen[i]`. Format yang dihasilkan berupa "**region**?**profit**\n". Disini menggunakan tanda "**?**" sebagai delimiter pada perintah selanjutnya.
-* Lalu dari `awk` tersebut akan di *pipe* ke dalam command `sort -g -t? -k2`. Dari hasil awk sebelumnya, akan dilakukan sorting, `-g` digunakan untuk nilai **numeric general**. `-t?` untuk mendefinisikan delimiter yang digunakan ("**?**"). dan `-k2` untuk memilih kolom yang ingin disortir (dalam kasus ini kolom **kedua** akan disortir secara **ascending**).
-* Lalu akan di *pipe* lagi ke dalam `awk -F? 'NR < 2 {printf "%s %f ", $1, $2}'`. `awk` ini digunakan untuk mengambil nilai terkecil dari hasil sortir sebelumnya. Lalu diprint dengan format "**region** **profit** ".
-* Setelah mendapat region dengan profit terkecil, hasil tersebut akan disimpan kedalam variable `$region` dan `$regionprofit`. disini kami menggunakan perintah \<\<\< untuk memasukkan variablenya dan `read -r` untuk membaca dari seluruh command sebelumnya. `-r` digunakan untuk meng-ignore backlash(**\\**).
-* Lalu **region** dan **profit**nya akan diprint menggunakan `printf "Region dengan profit paling sedikit:\n$region($regionprofit)\n\n"`
+
+
+
 
 ### Soal 1.b.
 **Deskripsi:**\
