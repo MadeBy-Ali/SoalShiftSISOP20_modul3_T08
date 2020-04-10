@@ -169,10 +169,8 @@ akan diambil menggunakan **(char *)arg**
     printf("file %s berupa folder\n", buffFrom);
     pthread_exit(0);
   }
-  closedir(dir);
+  closedir(dir); 
 ```
-note: dua ini kayanya buat -f 
-
 * Disini program akan melakukan mengecek eksistensi dan bentuk dari file yang diinputkan oleh user
 dari argumen yang diinputkan user menggunakan fungsi: 
     * **access()** dengan source `buffFrom` & `F_OK` sebagai `amode` untuk eksistensi. Jika argumen yang diinputkan
@@ -226,14 +224,14 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
 ```
-## note_input
+### note input
 note:   * input untuk argumen `-f`  > 2
         * input untuk argumen `*`   = 2
         * input untuk argumen `-d`  = 3
 * Pada main, kami menggunakan dua parameter yaitu `argc` & `*argv[]` untuk jumlah argumen & pointer ke masing masing
 argumen tersebut karna akan dibutuhkan beberapa pengecekan untuk argumen yang diinputkan.
 * Pertama program akan melakukan pengecekan jumlah pada **if()** pertama yang akan menampilkan error message jika
-jumlah input tidak sesuai dengan [note input](note_input).
+jumlah input tidak sesuai dengan [note input](#note-input).
 
 
 
