@@ -34,12 +34,12 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
                  *  Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread
 
     * (*) :  
-                 *  mengkategori seluruh file yang ada di working directory
+                 *  mengkategorikan seluruh file yang ada di working directory
 
 **Pembahasan:**\
 Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
-**getFileName**
+*getFileName*
 ``` bash
 char *getFileName(char *fName, char buff[]) {
   char *token = strtok(fName, "/");
@@ -53,6 +53,15 @@ char *getFileName(char *fName, char buff[]) {
   * Selanjutnya pada nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
   * Lalu **while loop** akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
   * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token selanjutnya hingga akhir dari input.
+
+
+
+
+
+
+
+
+
 
 
 
