@@ -18,13 +18,11 @@ Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blo
 
 **Deskripsi:**\
 Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:  
-
     * **(-f)** : 
                  *  user bisa menambahkan argumen file yang bisa dikategorikan sebanyak yang user inginkan  
                  *  Pada program kategori tersebut, folder jpg,c,zip tidak dibuat secara manual,
                     melainkan melalui program c. Semisal ada file yang tidak memiliki ekstensi,
                     maka dia akan disimpan dalam folder “Unknown”.  
-
     * **(-d)** :  
                  *  user hanya bisa menginputkan 1 directory saja.
                  *  Hasilnya perintah di atas adalah mengkategorikan file di /path/to/directory dan
@@ -33,7 +31,7 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
                  *  Program ini tidak rekursif.
                  *  Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread
 
-    * **(*)** :  
+    * (*) :  
                  *  mengkategori seluruh file yang ada di working directory
 
 **Pembahasan:**\
