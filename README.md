@@ -160,11 +160,65 @@ akan diambil menggunakan **(char *)arg**
   }
   closedir(dir);
 ```
-* Disini program akan melakukan mengecek eksistensi dan bentuk dari file/dir yang diinputkan oleh user
+note: dua ini kayanya buat -f 
+
+* Disini program akan melakukan mengecek eksistensi dan bentuk dari file yang diinputkan oleh user
 dari argumen yang diinputkan user menggunakan fungsi: 
     * **access()** dengan source `buffFrom` & `F_OK` sebagai `amode` untuk eksistensi. Jika argumen yang diinputkan
       tidak sesuai makan ditampilkan error message dan `thread` akan diselesaikan menggunakan **pthread_exit(0)**
+    * Pengecekan bentuk file yang diinputkan adalah dengan menggunakan **dir** yang dimana jika terbuka sebagai 
+      directory maka akan ditampilkan error message dan `thread` akan diselesaikan menggunakan **pthread_exit(0)**
+
+``` bash
+  getFileName(buffFrom, buffFileName);
+  strcpy(buffFrom, (char *) arg);
+
+  getExtension(buffFrom, buffExt);
+  for (int i = 0; i < sizeof(buffExt); i++) {
+    buffExt[i] = tolower(buffExt[i]);
+  }
+  strcpy(buffFrom, (char *) arg);
+```
+* Selanjutnya kami memanggil fungsi **getFilename()** dengan filename yang akan masuk ke `buffer` 
+baru `buffFilename`
+* Lalu kami memanggil fungsi **getExtension()** untuk mengambil setiap ext dari filename yang ada di `buffFrom`
+dan merubah tiap extension dari file yang ada menjadi `lowercase` menggunakan **for** loop degam fungsi **tolower()** dan `i` sebagai `counter`nya.
+
+``` bash
+  dirChecking(buffExt);
+
+  sprintf(buffTo, "%s/%s/%s", cwd, buffExt, buffFileName);
+  rename(buffFrom, buffTo);
+
+  pthread_exit(0);
+```
+* Selanjutnya fungsi **dirChecking()** akan dipanggil yang akan membuat directory baru untuk setiap ekstensi didalam `buffExt` yang belum memiliki directory
+* Lalu `buffTo` akan diisi dengan value setiap `buffer` yang sudah di set sebelumnya dengan urutan `cwd`,`buffExt`
+dan `buffFilename` menggunakan **sprintf()**. Kemudian file name yang ada di `buffFrom` `(const char *old_filename)`
+akan di **rename()** dengan urutan dari `buffTo` `(const char *new_filename)` yang sudah di set.
+
+``` bash
+int main(int argc, char *argv[]) {
+  if (argc == 1) {
+    printf("Argument kurang\n");
+    exit(1);
+  }
+  if (strcmp(argv[1], "-f") != 0 && strcmp(argv[1], "*") != 0 && strcmp(argv[1], "-d")) {
+    printf("Argument tidak ada\n");
+    exit(1);
+  }
+
+  if (strcmp(argv[1], "-f") == 0) {
+    if (argc <= 2) {
+      printf("Argument salah\n");
+      exit(1);
+    }
+```
 * 
+
+
+
+
 
 
 
