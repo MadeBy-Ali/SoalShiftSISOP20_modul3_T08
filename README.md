@@ -17,7 +17,7 @@ Kelompok T08
 Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/..........)
 
 **Deskripsi:**\
-Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:\n
+Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:  
     * **(-f)** : * user bisa menambahkan argumen file yang bisa dikategorikan sebanyak yang user inginkan  seperti contoh di atas.
 ● Pada program kategori tersebut, folder jpg,c,zip tidak dibuat secara manual,
 melainkan melalui program c. Semisal ada file yang tidak memiliki ekstensi,
