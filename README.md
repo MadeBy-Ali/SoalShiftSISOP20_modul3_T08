@@ -50,25 +50,21 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
 #include <pthread.h>
 #include <errno.h>
 ```
-* library tipe data khusus (e.g. pid_t)
-* LIbrary untuk
-* library untuk fungsi input-output (e.g. printf(), sprintf())
-* library untuk fungsi umum (e.g. exit(), atoi())
-* library untuk melakukan system call kepada kernel linux (e.g. fork())
-* Library untuk 
-* Library untuk
-* Library untuk
-* Library untuk merepresentasikan directory stream dan struct dirent(e.g. struct dirent *entry)
-* Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
-* Library untuk error handling (e.g. errno)
+* `#include <sys/types.h>` Library tipe data khusus (e.g. pid_t)
+* `#include <sys/stat.h>` LIbrary untuk
+* `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
+* `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
+* `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
+* `#include <string.h>` Library untuk 
+* `#include <ctype.h>` Library untuk
+* `#include <dirent.h>` Library untuk merepresentasikan directory stream & struct dirent(e.g. struct dirent *entry)
+* `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
+* `#include <errno.h>` Library untuk error handling (e.g. errno)
 
 
+Pertama kami melakukan pendefinisian 3 fungsi dan 1 routine(thread) untuk program ini yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
-
-
-Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
-
-Fungsi *getFileName*
+**Fungsi *getFileName***
 ``` bash
 char *getFileName(char *fName, char buff[]) {
   char *token = strtok(fName, "/");
@@ -78,13 +74,13 @@ char *getFileName(char *fName, char buff[]) {
   }
 }
 ```
-* Fungsi didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
+* Fungsi ini didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
   * Selanjutnya nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
   * Lalu **while** loop akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
   * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token selanjutnya hingga akhir dari input.
 
 
-Fungsi *getExtension*
+**Fungsi *getExtension***
 ``` bash
 char *getExtension(char *fName, char buff[]) {
   char buffFileName[1337];
@@ -94,7 +90,7 @@ char *getExtension(char *fName, char buff[]) {
     token = strtok(NULL, "/");
   }
 ```
-* Fungsi didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn ekstensi dari sebuah file.
+* Fungsi ini didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn ekstensi dari sebuah file.
 * Selanjutnya Fungsi akan melakukan hal yang sama persis seperti fungsi getFile name yang nantinya akan menghasilkan nama file yang masih beserta ekstensinya 
 
 ``` bash
@@ -120,6 +116,7 @@ char *getExtension(char *fName, char buff[]) {
 * Pengecekan untuk jumlah `counter` yang kurang atau kondisi dimana file tidak ada ekstensi
 * Untuk file yang tidak memiliki ekstensi, `buffer` akan berisi `unknown`
 
+Fungsi *directory Checking*
 ``` bash
  void dirChecking(char buff[]) {
   DIR *dr = opendir(buff);
@@ -133,7 +130,7 @@ char *getExtension(char *fName, char buff[]) {
 * Disini pembuatan directory baru akan dilakukan jika ada sebuah error yang dihasilakan oleh fungsi **opendir()**, lalu **if** akan melakukan error handling.
 * Fungsi ini melakukan pembuatan directory baru menggunakan fungsi **mkdir()** dengan nama yang di return `buffer` dan permission `0775` atau `read and execute` lalu akan di tutup kembali.
 
-
+***Routine***
 ``` bash
 void *routine(void* arg) {
   char buffExt[100];
@@ -145,6 +142,8 @@ void *routine(void* arg) {
   strcpy(buffFrom, (char *) arg);
 }
 ```
+* Pada Routine ini kami mendefinisikan lima `buffer` yang masih masingnya akan menghandle: `ext` `fileName`
+`path input` `path to` dan `cwd`
 * 
 
 
