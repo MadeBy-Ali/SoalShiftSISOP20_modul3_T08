@@ -1,6 +1,5 @@
-# SoalShiftSISOP20_modul3_T08
-
-Penyelesaian Soal Shift 1 Sistem Operasi 2020\
+# Shift 1 SISOP 2020 - T08
+Penyelesaian Soal Shift 3 Sistem Operasi 2020\
 Kelompok T08
   * I Made Dindra Setyadharma (05311840000008)
   * Muhammad Irsyad Ali (05311840000041)
@@ -19,7 +18,10 @@ Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/...
 
 **Deskripsi:**\
 Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:
-    *
+    * **(-f)** : * user bisa menambahkan argumen file yang bisa dikategorikan sebanyak yang user inginkan  seperti contoh di atas.
+● Pada program kategori tersebut, folder jpg,c,zip tidak dibuat secara manual,
+melainkan melalui program c. Semisal ada file yang tidak memiliki ekstensi,
+maka dia akan disimpan dalam folder “Unknown”.
 
 **Pembahasan:**\
 Untuk menentukan keuntungan paling sedikit, dapat menggunakan command `awk`.
