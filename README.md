@@ -1,4 +1,4 @@
-# Shift 1 SISOP 2020 - T08
+# Shift 3 SISOP 2020 - T08
 Penyelesaian Soal Shift 3 Sistem Operasi 2020\
 Kelompok T08
   * I Made Dindra Setyadharma (05311840000008)
@@ -8,9 +8,7 @@ Kelompok T08
 ## Table of Contents
 * [Soal 3](#soal-3)
 * [Soal 4](#soal-3)
-  * [Soal 3.a.](#soal-3a)
-  * [Soal 3.b.](#soal-3b)
-  * [Soal 3.c.](#soal-3c)
+ 
 ---
 
 ## Soal 3
@@ -40,7 +38,9 @@ arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan kete
                  *  mengkategorikan seluruh file yang ada di working directory
 
 **Asumsi Soal:**
-
+Soal meminta kami untuk membuat program c yang mampu mengkategorikan file secara tidak rekursif dengan beberapa 
+parameter yang sudah ditentukan. Karena diminta untuk adanya thread pada setiap file yang akan di kategorikan, kami 
+mengasumsikan bahwa thread akan menjalankan routinenya pada setiap absolut path yang diambil dari sebuah variabel yang menyimpannya terlebih dahulu dan bukan langsung dari dari sebuah fungsi yang me-return absolut path 
 
 **Pembahasan:**
 
@@ -57,12 +57,12 @@ arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan kete
 #include <errno.h>
 ```
 * `#include <sys/types.h>` Library tipe data khusus (e.g. pid_t)
-* `#include <sys/stat.h>` LIbrary untuk
+* `#include <sys/stat.h>` LIbrary untuk penddeklarasian fungsi stat() dan semacamnya (e.g.fstat() and lstat())  
 * `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
 * `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
 * `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
-* `#include <string.h>` Library untuk 
-* `#include <ctype.h>` Library untuk
+* `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
+* `#include <ctype.h>` Library untuk pendefinisian berbagai fungsi untuk karakter handling(e.g.tolower())
 * `#include <dirent.h>` Library untuk merepresentasikan directory stream & struct dirent(e.g. struct dirent *entry)
 * `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
 * `#include <errno.h>` Library untuk error handling (e.g. errno)
@@ -317,72 +317,60 @@ int file_count = 0;
 argumen `-d` dan `*`
 * Pertama-tama directory akan dibuka dengan **opendir()** dan di set ke dalam variabel `dir` untuk nantinya di cek
 * `struct dirent *entry;` pendefinisian struct `dirent` untuk penggunaan fungsi **readdir()**
-* 
+* **while** disini adalah untuk pengecekan tiap filenya di dalam `dir` yang sudah dibuka dengan menggunakan 
+`entry->d_type` yang dimana itu adalah field yang berisi indikasi tipe file dan `DT_REG` merupakan macro constant 
+dari `d_type` yang berarti tipe file reguler, untuk setiap file reguler yang ditemukan maka nilai `counter` akan di
+increment, **while()** akan berjalan sampai tiap file yang ada di dalam directory habis.
 
+```bash 
+pthread_t tid[file_count];
+  char buff[file_count][1337];
+  int iter = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Soal 1.b.
-**Deskripsi:**\
-Tampilkan 2 negara bagian (state) yang memiliki keuntungan (profit) paling sedikit berdasarkan hasil poin a
-
-**Pembahasan:**\
-Untuk menentukan keuntungan paling sedikit, dapat menggunakan `awk` seperti pada poin a, namun dengan sedikit perbedaan.
+  dir = opendir(directory);
+  while ((entry = readdir(dir)) != NULL) {
+    if (entry->d_type == DT_REG) {
+      sprintf(buff[iter], "%s/%s", directory, entry->d_name);
+      iter++;
+    }
+  }
+  closedir(dir);
+```
+* Sebelumnya kami mendefinisikan sebuah `buffer` untuk menyimpan absolut path dan satu variabel untuk iterasi
+* Lalu directory dibuka dengan **opendir()** untuk nantinya pengecekan tiap file didalamnya dilakukan
+* Disini kami men-set `tid` sejumlah nilai `counter` (banyak file reguler) di setiap directory untuk thread yang 
+akan dibuat
+* `sprintf(buff[iter], "%s/%s", directory, entry->d_name);` disini akan memasukan absolut path dari setiap file 
+reguler itu sendiri, kondisi ini akan berjalan selama file dari sebuah directory belum habis sesuai parameter **while** loop.
+* Size dari `buffer`(iter) akan di increment untuk setiap absolut path yang masuk ke dalam `buffer` tersebut
 
 ``` bash
-read -r state1 state1profit state2 state2profit <<< `awk -F "\t" -v region=$region '{if (match($13, region)) seen[$11]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv | sort -g -t? -k2 | awk -F? 'NR < 3 {printf "%s %f ", $1, $2}'`
-printf "2 State dengan profit paling sedikit dari region $region:\n$state1($state1profit)\n$state2($state2profit)\n\n"
+  for (int i = 0; i < file_count; i++) {
+    char  *test = (char*)buff[i];
+    printf("%s\n", test);
+    pthread_create(&tid[i], NULL, &routine, (void *)test);
+  }
+
+  for (int i = 0; i < file_count; i++) {
+    pthread_join(tid[i], NULL);
+  }
 ```
+* **for()** loop disini akan berjalan sebanyak jumlah file reguler yang sudah tersimpan di `buffer` sebelumnya. 
+* `*test` disini berfungsi untuk menyimpan terlebih dahulu absolut path dari setiap file sebelum dijalankan di  
+dalam thread. Jadi thread disini tidak langusng mengambil argumen keempatnya dari `buffer`  
+* Pembuatan thread menggunakan `pthread_create(&tid[i], NULL, &routine, (void *)test)` terlihat disini argumen
+keempatnya kami mengguanakan `test` yang tadi sudah menyimpan dahulu absolut path dari setiap file
+* **for()** loop kedua akan men-join setiap thread yang sudah dibuat  
 
-* Pada bagian `awk -F "\t" -v region=$region '{if (match($13, region)) seen[$11]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv`, akan menjalankan perintah awk dengan "**tab**" sebagai field separatornya. Selain itu `-v` digunakan untuk meng-set variable ***region*** (region dengan profit terkecil) kedalam awk.
-  * Dalam block **BODY**: akan mengecek apakah kolom ke-`$13`(**regionnya**) sama dengan region yang didapat pada poin a. Jika sama, maka **profit**(`$NF`) dari **state** tersebut akan dijumlahkan ke dalam array `seen` dengan menggunakan **state**(`$11`) sebagai index dari array tersebut.
-  * Dalam block **END**: akan melakukan loop untuk setiap index dari array `seen`, lalu setiap index dan nilainya akan diprint menggunakan `printf "%s?$f\n", i, seen[i]`. Format yang dihasilkan berupa "**state**?**profit**\n".
-* Lalu dari `awk` tersebut akan di *pipe* ke dalam command `sort -g -t? -k2`. Kegunaannya sama dengan poin a, yaitu untuk mensortir berdasarkan kolom kedua(**profit**).
-* Lalu akan di *pipe* lagi ke dalam `awk -F? 'NR < 3 {printf "%s %f ", $1, $2}'`. Kegunaannya sama dengan poin a, tetapi disini akan mengambil 2 nilai terkecil dari hasil sortir sebelumnya. Lalu diprint dengan format "**state** **profit** ".
-* Setelah mendapat 2 state dengan region terkecil, hasil tersebut akan disimpan kedalam variable `$state1`, `$state1profit`, `$state2`, `$state2profit`. Cara memasukkannya sama dengan poin a.
-* Lalu 2 **state** dan **profit**nya akan diprint menggunakan `printf "2 State dengan profit paling sedikit dari region $region:\n$state1($state1profit)\n$state2($state2profit)\n\n"`
+**Kesulitan:**  
+Tidak ada. Dindra bukan apes, he`s speaking languange of the gods
 
-### Soal 1.c.
-**Deskripsi:**\
-Tampilkan 10 produk (product name) yang memiliki keuntungan (profit) paling sedikit berdasarkan 2 negara bagian (state) hasil poin b
+**ScreenShot**  
 
-**Pembahasan:**\
-Untuk poin c, bisa menggunakan `awk` yang mirip dengan poin b. Untuk variablenya, ditambahkan variable `$state1` dan `$state2` kedalam `awk`.
+**Contoh input argumen `-f`**  
 
-``` bash
-list=`awk -F "\t" -v state1=$state1 -v state2=$state2 '{if (match ($11, state1)||match ($11, state2)) seen[$17]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv | sort -g -t? -k2 | awk -F? 'NR < 11 {printf "%s(%f)\n", $1, $2}'`
-printf "List barang dengan profit paling sedikit antara state $state1 dan $state2:\n$list\n\n"
-```
 
-* Pada `awk` ditambahkan `-v` untuk masing-masing state, lalu akan dicari baris yang **state**nya sama dengan **state** dengan profit terkecil. Untuk konsep pada block **BODY** dan **END** sama seperti poin sebelumnya.
-* Lalu kegunaan fungsi `sort` sama seperti poin sebelumnya
-* Hasil `sort` akan di *pipe* ke dalam `awk` untuk mencari 10 **product** dengan **profit** terkecil. Format yang dihasilkan akan menjadi "**product**(**profit**)\n"
-* Hasil command tersebut akan dimasukkan ke dalam variable `$list`. Disini tidak menggunakan `read -r` agar "**\n**" masuk ke dalam variable tersebut.
-* Lalu 10 **product** dan **profit**nya akan diprint menggunakan `printf "List barang dengan profit paling sedikit antara state $state1 dan $state2:\n$list\n\n"`
+**Contoh input argumen `-d`**  
 
-#### ScreenShot
-**Contoh Output:**\
-![Output Soal 1](https://user-images.githubusercontent.com/17781660/74916187-ff17d180-53f7-11ea-814e-693ffe29028e.png)
 
----
+**Contoh input argumen `*`**  
