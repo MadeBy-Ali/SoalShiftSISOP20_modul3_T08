@@ -39,7 +39,7 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
 **Pembahasan:**\
 Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
-*getFileName*
+Fungsi *getFileName*
 ``` bash
 char *getFileName(char *fName, char buff[]) {
   char *token = strtok(fName, "/");
@@ -50,9 +50,60 @@ char *getFileName(char *fName, char buff[]) {
 }
 ```
 * Fungsi didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
-  * Selanjutnya pada nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
-  * Lalu **while loop** akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
+  * Selanjutnya nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
+  * Lalu **while** loop akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
   * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token selanjutnya hingga akhir dari input.
+
+
+Fungsi *getExtension*
+``` bash
+char *getExtension(char *fName, char buff[]) {
+  char buffFileName[1337];
+  char *token = strtok(fName, "/");
+  while (token != NULL) {
+    sprintf(buffFileName, "%s", token);
+    token = strtok(NULL, "/");
+  }
+```
+* Fungsi didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn ekstensi dari sebuah file.
+* Selanjutnya Fungsi akan melakukan hal yang sama persis seperti fungsi getFile name yang nantinya akan menghasilkan nama file yang masih beserta ekstensinya 
+
+``` bash
+ int count = 0;
+  token = strtok(buffFileName, ".");
+  while (token != NULL) {
+    count++;
+    sprintf(buff, "%s", token);
+    token = strtok(NULL, ".");
+  }
+```
+* Disini file name yang masih beserta ekstensinya akan dipecah kembali menggunakan fungsi **strtok()** dengan delimiter `.` sebagai pemisah antara nama file dengan ekstensi dan disimpan kedalam `token*`
+* Karna yang akan pertama di return oleh fungsi **strtok()** adalah `token` pertma/kata pertama seblum delimiter maka **while** loop akan berjalan selama `token` belum habis atau belum sampai ekstensinya dan `counter` akan di increment sebagai variabel untuk checking
+* Ekstensi yang sudah didapat akan di print ke dalam `buffer`.
+
+``` bash
+ if (count <= 1) {
+    strcpy(buff, "unknown");
+  }
+
+  return buff;
+```
+* Pengecekan untuk jumlah `counter` yang kurang atau kondisi dimana file tidak ada ekstensi
+* Untuk file yang tidak memiliki ekstensi, `buffer` akan berisi `unknown`
+
+``` bash
+ void dirChecking(char buff[]) {
+  DIR *dr = opendir(buff);
+  if (ENOENT == errno) {
+    mkdir(buff, 0775);
+    closedir(dr);
+  }
+}
+```
+* Fungsi didefinisikan menggunakan satu parameter yaitu `buff[]` untuk menyimpan hasil dari fungsi ini sendiri,
+Fungsi ini melakukan pembuatan directory baru dengan 
+
+
 
 
 
