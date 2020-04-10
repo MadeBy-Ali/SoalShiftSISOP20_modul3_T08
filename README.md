@@ -6,7 +6,7 @@ Kelompok T08
 
 ---
 ## Table of Contents
-* [Soal 3](#soal-2)
+* [Soal 3](#soal-3)
 * [Soal 4](#soal-3)
   * [Soal 3.a.](#soal-3a)
   * [Soal 3.b.](#soal-3b)
@@ -17,7 +17,10 @@ Kelompok T08
 Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal3/soal3.c)
 
 **Deskripsi:**\
-Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:  
+Soal meminta kami untuk membuat sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan 
+file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya 
+yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapat 3
+arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:  
 
     * (-f) : 
                  *  user bisa menambahkan argumen file yang bisa dikategorikan sebanyak yang user inginkan  
@@ -36,7 +39,10 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
     * (*) :  
                  *  mengkategorikan seluruh file yang ada di working directory
 
-**Pembahasan:**\
+**Asumsi Soal:**
+
+
+**Pembahasan:**
 
 ``` bash
 #include <sys/types.h>
@@ -62,7 +68,8 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
 * `#include <errno.h>` Library untuk error handling (e.g. errno)
 
 
-Pertama kami melakukan pendefinisian 3 fungsi dan 1 routine(thread) untuk program ini yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
+Pertama kami melakukan pendefinisian 3 fungsi dan 1 routine(thread) untuk program ini yaitu: `getFileName`,
+`getExtension`, `dirChecking` dan `routine`.
 
 **Fungsi *getFileName***
 ``` bash
@@ -74,10 +81,14 @@ char *getFileName(char *fName, char buff[]) {
   }
 }
 ```
-* Fungsi ini didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
-  * Selanjutnya nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan dengan delimiter `/` dan akan disimpan di dalam `*token` 
-  * Lalu **while** loop akan berjalan selama token belum habis dan file name yang sudah diambil akan di print kedalam buffer.
-  * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token selanjutnya hingga akhir dari input.
+* Fungsi ini didefinisikan menggunakan dua parameter yaitu `*fname` sebagai pointernya dan `buff[]` untuk 
+store hasil dari fungsi ini sendiri, dan akan mereturn file name yang masih beserta ekstensinya.
+  * Selanjutnya nama dari file akan diambil menggunakan fungsi **strtok()** untuk memecah string dengan 
+  dengan delimiter `/` dan akan disimpan di dalam `*token` 
+  * Lalu **while** loop akan berjalan selama token belum habis dan file name yang sudah diambil akan di 
+  print kedalam `buffer`.
+  * Fungsi **strtok()** akan dijalankan lagi dengan parameter pertama = **NULL** untuk mencari token 
+  selanjutnya hingga akhir dari input.
 
 
 **Fungsi *getExtension***
@@ -197,6 +208,7 @@ dan merubah tiap extension dari file yang ada menjadi `lowercase` menggunakan **
 dan `buffFilename` menggunakan **sprintf()**. Kemudian file name yang ada di `buffFrom` `(const char *old_filename)`
 akan di **rename()** dengan urutan dari `buffTo` `(const char *new_filename)` yang sudah di set.
 
+***main()***
 ``` bash
 int main(int argc, char *argv[]) {
   if (argc == 1) {
@@ -214,7 +226,14 @@ int main(int argc, char *argv[]) {
       exit(1);
     }
 ```
-* 
+## note_input
+note:   * input untuk argumen `-f`  > 2
+        * input untuk argumen `*`   = 2
+        * input untuk argumen `-d`  = 3
+* Pada main, kami menggunakan dua parameter yaitu `argc` & `*argv[]` untuk jumlah argumen & pointer ke masing masing
+argumen tersebut karna akan dibutuhkan beberapa pengecekan untuk argumen yang diinputkan.
+* Pertama program akan melakukan pengecekan jumlah pada **if()** pertama yang akan menampilkan error message jika
+jumlah input tidak sesuai dengan [note input](note_input).
 
 
 
