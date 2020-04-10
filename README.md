@@ -14,7 +14,7 @@ Kelompok T08
 ---
 
 ## Soal 3
-Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/..........)
+Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal3/soal3.c)
 
 **Deskripsi:**\
 Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapa 3 arguman yang dapat di inputkan yaitu **(-f)**, **(*)** dan **(-d)**. Dengan ketentuan sebagai berikut:  
@@ -33,12 +33,20 @@ Buatlah sebuah program dari C untuk mengkategorikan file. Program ini akan memin
                  *  Program ini tidak rekursif.
                  *  Setiap 1 file yang dikategorikan dioperasikan oleh 1 thread
 
+    * **(*)** :  
+                 *  mengkategori seluruh file yang ada di working directory
+
 **Pembahasan:**\
-Untuk menentukan keuntungan paling sedikit, dapat menggunakan command `awk`.
+Pertama akan dilakukan pendefinisian 3 fungsi dan 1 routine untuk thread yaitu: `getFileName`, `getExtension`, `dirChecking` dan `routine`.
 
 ``` bash
-read -r region regionprofit <<< `awk -F "\t" 'NR > 1 {seen[$13]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv | sort -g -t? -k2 | awk -F? 'NR < 2 {printf "%s %f ", $1, $2}'`
-printf "Region dengan profit paling sedikit:\n$region($regionprofit)\n\n"
+char *getFileName(char *fName, char buff[]) {
+  char *token = strtok(fName, "/");
+  while (token != NULL) {
+    sprintf(buff, "%s", token);
+    token = strtok(NULL, "/");
+  }
+}
 ```
 
 * Pada bagian `awk -F "\t" 'NR > 1 {seen[$13]+=$NF} END {for (i in seen) printf "%s?%f\n", i, seen[i]}' $PWD/Sample-Superstore.tsv`, akan menjalankan perintah awk dengan **"tab"** sebagai field separatornya.
