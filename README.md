@@ -206,6 +206,7 @@ dan merubah tiap extension dari file yang ada menjadi `lowercase` menggunakan **
 dan `buffFilename` menggunakan **sprintf()**. Kemudian file name yang ada di `buffFrom` `(const char *old_filename)`
 akan di **rename()** dengan urutan dari `buffTo` `(const char *new_filename)` yang sudah di set.
 
+
 ***main()***
 ``` bash
 int main(int argc, char *argv[]) {
@@ -217,21 +218,107 @@ int main(int argc, char *argv[]) {
     printf("Argument tidak ada\n");
     exit(1);
   }
-
-  if (strcmp(argv[1], "-f") == 0) {
-    if (argc <= 2) {
-      printf("Argument salah\n");
-      exit(1);
-    }
 ```
-### note input
-note:   * input untuk argumen `-f`  > 2
-        * input untuk argumen `*`   = 2
-        * input untuk argumen `-d`  = 3
+### note input  
+*note:  * input untuk argumen `-f`  > 2  
+        * input untuk argumen `*`   = 2  
+        * input untuk argumen `-d`  = 3  
 * Pada main, kami menggunakan dua parameter yaitu `argc` & `*argv[]` untuk jumlah argumen & pointer ke masing masing
 argumen tersebut karna akan dibutuhkan beberapa pengecekan untuk argumen yang diinputkan.
 * Pertama program akan melakukan pengecekan jumlah pada **if()** pertama yang akan menampilkan error message jika
 jumlah input tidak sesuai dengan [note input](#note-input).
+* Kedua program akan melakukan pengecekan character argumen yang diinputkan dengan menggunakkan fungsi **strcmpr()**
+dengan pointer ke masing masing argumennya menggunakan ***argv[]** sebagai parameter pertama
+dan `-f` , `*` serta `-d`sebagi parameter kedua. Dan akan menampilakan error message jika argumen yang diinputkan
+tidak sesuai
+
+``` bash
+if (strcmp(argv[1], "-f") == 0) {
+    if (argc <= 2) {
+      printf("Argument salah\n");
+      exit(1);
+    }
+
+    pthread_t tid[argc-2];
+    for (int i = 2; i < argc; i++) {
+      pthread_create(&tid[i-2], NULL, &routine, (void *)argv[i]);
+    }
+    for (int i = 2; i < argc; i++) {
+      pthread_join(tid[i-2], NULL);
+    }
+    exit(0);
+  }
+```
+* Disini program akan mengecek banyak argumen jika yang diinputkan adalah `-f` sekaligus membuat thread dengan 
+men-set `thread id` terlebih dahulu dengan nilai `jumlah_argumen - 2` disini **for()** loop akan berjalan sebanyak 
+`i` kali, dimana `i` adalah jumlah argumen, **for()** loop akan membuat thread menggunakan **pthread_create()** 
+untuk setiap argumennya dengan `tid` `i - 2` dimana `i` tadi akan di increment setiap parameter **for()** terpenuhi
+* Jumlah argumen untuk penggunaan `-f` harus sesuai dengan [note input](#note-input), jika tidak maka ditampilkan 
+error message dan program akan ditutup dengan **exit(1)**
+* Lalu `thread` akan diajalankan dengan `routine` kepada `(void *)argv[i])`
+* Selanjutnya program akan men-join setiap `thread` yang sudah dibuat dengan **pthread_join()**
+
+``` bash
+ char *directory;
+  if (strcmp(argv[1], "*") == 0) {
+    if (argc != 2) {
+      printf("Argument salah\n");
+      exit(1);
+    }
+    char buff[1337];
+    getcwd(buff, sizeof(buff));
+    directory = buff;
+  }
+```
+* Disini program akan mengecek banyak argumen jika yang diinputkan adalah `*`. Jumlah argumen untuk penggunaan `*` 
+harus sesuai dengan [note input](#note-input), jika tidak maka ditampilkan error message dan program akan ditutup 
+dengan **exit(1)**
+* Jika hanya **if()** pertama yang terpenuhi(argumen benar) maka program akan menset `cwd` beserta sizenya 
+menggunakan **getcwd()** kedalam `buffer` baru yang nantinya akan dimasukkan ke variabel `directory`
+
+``` bash
+if (strcmp(argv[1], "-d") == 0) {
+    if (argc != 3) {
+      printf("Argument salah\n");
+      exit(1);
+    }
+    DIR* dir = opendir(argv[2]);
+    if (dir) {
+      directory = argv[2];
+    } else if (ENOENT == errno) {
+      printf("Directory tidak ada\n");
+      exit(1);
+    }
+    closedir(dir);
+  }
+```
+* Disini program akan mengecek banyak argumen jika yang diinputkan adalah `-d`. Jumlah argumen untuk penggunaan `-d`
+harus sesuai dengan [note input](#note-input), jika tidak maka ditampilkan error message dan program akan ditutup 
+dengan **exit(1)**
+* Jika hanya **if()** pertama yang terpenuhi(argumen benar) maka program akan membuka directory sesuai dengan 
+argumen kedua yang menggunakan **opendir()** dan memasukan nama directory tersebut kedalam variabel dir, namun
+jika directory tidak terbuka maka akan ada error handling di dalam **else if()** yang akan menampilkan error 
+message dan exit prgram dengan **exit(1)** 
+* Contoh untuk kondisi **else if()** disini adalah file yang tidak memiliki ekstensi, jadi variabel `dir` berisi 
+`NULL` dan directory tidak terbuka.  
+
+``` bash
+int file_count = 0;
+  DIR* dir = opendir(directory);
+  struct dirent *entry;
+  while ((entry = readdir(dir)) != NULL) {
+    if (entry->d_type == DT_REG) {
+      file_count++;
+    }
+  }
+  closedir(dir);
+```
+* Disini kami membuat file counter untuk setiap file yang ada dalam suatu directory, bagian ini adalah handler untuk
+argumen `-d` dan `*`
+* Pertama-tama directory akan dibuka dengan **opendir()** dan di set ke dalam variabel `dir` untuk nantinya di cek
+* `struct dirent *entry;` pendefinisian struct `dirent` untuk penggunaan fungsi **readdir()**
+* 
+
 
 
 
