@@ -14,7 +14,7 @@ Kelompok T08
 ## Soal 3
 Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal3/soal3.c)
 
-**Deskripsi:**\
+**Deskripsi:**
 Soal meminta kami untuk membuat sebuah program dari C untuk mengkategorikan file. Program ini akan memindahkan 
 file sesuai ekstensinya (tidak case sensitive. JPG dan jpg adalah sama) ke dalam folder sesuai ekstensinya 
 yang folder hasilnya terdapat di working directory ketika program kategori tersebut dijalankan. Terdapat 3
@@ -374,3 +374,127 @@ Tidak ada. Dindra bukan apes, he`s speaking languange of the gods
 
 
 **Contoh input argumen `*`**  
+
+
+
+## Soal 4
+Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal3/soal3.c)
+
+**Deskripsi:**
+Norland mendapati ada sebuah tiga teka-teki yang tertulis di tiga pilar berbeda. Untuk dapat mengambil batu mulia 
+di suatu pilar, Ia harus memecahkan teka-teki yang ada di pilar tersebut. Norland menghampiri setiap pilar secara 
+bergantian. 
+
+**Soal 2.a.**
+**Deskripsi:**
+Pada teka teki untuk pilar pertama Norland diminta untuk :
+*  Membuat program C dengan nama "4a.c", yang berisi program untuk melakukan perkalian matriks. Ukuran matriks 
+pertama adalah 4x2, dan matriks kedua 2x5. Isi dari matriks didefinisikan di dalam kodingan. Matriks nantinya akan 
+berisi angka 1-20 (tidak perlu dibuat filter angka).
+* Dan menampilkan matriks hasil perkaliannya ke layar.
+
+
+**Asumsis Soal:**
+
+**Pembahasan:**
+```bash
+#include <stdio.h>
+#include <pthread.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+```
+* `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
+* `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
+* `#include <sys/ipc.h>` Library untuk
+* `#include <sys/shm.h>` Library untuk
+* `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
+* `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
+* `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
+
+
+```bash
+int matA[4][2] = {
+  {1, 1},
+  {2, 2},
+  {1, 1},
+  {2, 2}
+};
+int matB[2][5] = {
+  {1, 4, 1, 2, 1},
+  {1, 2, 1, 4, 1}
+};
+int matC[4][5];
+```
+* Disini kami melakukan pendefinisian tiga matriks yaitu `matA`(matriks 4*2), `matB`(matriks 2*5) dan `matC`
+(matriks 4*5 sebagai matriks hasil perkalian)
+* Value dari matriks di set dengan range int 1-20 sesuai soal
+
+``` bash
+struct args {
+  int i;
+  int j;
+};
+```
+* Lalu kami mendefinisikan `struct` dengan member `i` sebgai baris dan `j` sebagai kolom 
+
+``` bash
+void *kali(void* arg) {
+  int i = ((struct args*)arg)->i;
+  int j = ((struct args*)arg)->j;
+
+  for (int k = 0; k < 2; k++) {
+    matC[i][j] += matA[i][k] * matB[k][j];
+  } 
+}
+```
+* Fungsi pengkalian disini mengguanakan `arg` sebagai argumennya dan `((struct args*)arg)->i`akan memasukan
+baris dari tiap matriks kedalam variabel `i` serta `int j = ((struct args*)arg)->j` akan memasukan
+kolom dari tiap matriks kedalam variabel `j`
+* Pada **for()** loop , kami membuat sebuah variabel `k` yang menjadi nilai kesamaan ordo matriks( 2 kolom
+di matriks pertama dan 2 baris di matriks kedua) yang akan mengulang sebanyak 2 kali
+* Perkalian dilakukan dengan mengalikan setiap baris di `matirksA` dengan setiap kolom di `matriksB`, jadi `k`
+disini mengindikasikan baris pertama dan kolom pertama pada pengulangan pertama, dan setrusnya
+* Lalu hasil perkalian akan ditambahkan dan dimasukan ke `matriksC`. Pada case ini ordo matriks hasil adalah (4*5),
+karena ordo matriks hasil perkalian dua buah matriks adalah jumlah baris pertama dikali jumlah kolom ke dua. 
+
+``` bash
+int main() {
+
+  pthread_t tid[4][5];
+
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      struct args *index = (struct args *)malloc(sizeof(struct args));
+      index->i = i;
+      index->j = j;
+      pthread_create(&tid[i][j], NULL, &kali, (void *)index);
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      pthread_join(tid[i][j], NULL);
+    }
+  }
+```
+* Pada main, pertama-tama kami mendefinisikan `tid` dari `thread` dengan jumlah ordo matriks hasil, dan sebuah 
+`struct` yang berisi atribut `index`  
+* **for()** pertama adalah sebagai looping untuk indikasi baris dan **for()** kedua sebagai loopinh indikasi kolom
+yang setiap indikasi baris dan kolom tersbeut akan diset ke `i` dan `j`
+* Disini `thread` akan dibuat dengan **pthread_create(&tid[i][j], NULL, &kali, (void *)index)** dan berjalan dengan `tid` `i` dan `j` yang di increment setiap perulangannya
+* `thread` akan menjalankan fungsi `kali` sebagai routine dengan atribut `index` sebagai variabel yang digunakan   
+* Selanjutnya kami men-join setiap `thread` yang sudah dibuat dengan **pthread_join(tid[i][j], NULL)**
+
+``` bash
+printf("Matriks :\n");
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      printf("%4d", matC[i][j]);
+    }
+    printf("\n");
+  }
+```
+* Lalu kami melakukan printout dengan **printf("%4d", matC[i][j])** untuk setiap baris dan kolom menggunakan 
+counter `i` dan `j` pada dua **for()** loops yang masing masingnya untuk counter baris dan kolom 
