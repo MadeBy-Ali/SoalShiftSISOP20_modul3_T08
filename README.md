@@ -8,7 +8,7 @@ Kelompok T08
 ## Table of Contents
 * [Soal 3](#soal-3)
 * [Soal 4](#soal-4)
-  * [soal 4 a](##soal-4.a.)
+  * [soal 4 a](#soal-4.a.)
 
  
 ---
