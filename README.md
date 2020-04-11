@@ -8,9 +8,9 @@ Kelompok T08
 ## Table of Contents
 * [Soal 3](#soal-3)
 * [Soal 4](#soal-4)
-  * [soal 4 a](#soal-4.a.)
-  * [soal 4 b](#soal-4.b.)
-  * [soal 4 c](#soal-4.c.)
+  * [soal 4 a](#Soal-4.a.)
+  * [soal 4 b](#Soal-4.b.)
+  * [soal 4 c](#Soal-4.c.)
 
  
 ---
