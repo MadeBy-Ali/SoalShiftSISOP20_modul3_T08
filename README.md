@@ -7,7 +7,7 @@ Kelompok T08
 ---
 ## Table of Contents
 * [Soal 3](#soal-3)
-* [Soal 4](#soal-3)
+* [Soal 4](#soal-4.a.)
  
 ---
 
@@ -385,7 +385,7 @@ Norland mendapati ada sebuah tiga teka-teki yang tertulis di tiga pilar berbeda.
 di suatu pilar, Ia harus memecahkan teka-teki yang ada di pilar tersebut. Norland menghampiri setiap pilar secara 
 bergantian. 
 
-**Soal 2.a.**
+### **Soal 4.a.**
 **Deskripsi:**
 Pada teka teki untuk pilar pertama Norland diminta untuk :
 *  Membuat program C dengan nama "4a.c", yang berisi program untuk melakukan perkalian matriks. Ukuran matriks 
@@ -497,4 +497,21 @@ printf("Matriks :\n");
   }
 ```
 * Lalu kami melakukan printout dengan **printf("%4d", matC[i][j])** untuk setiap baris dan kolom menggunakan 
-counter `i` dan `j` pada dua **for()** loops yang masing masingnya untuk counter baris dan kolom 
+counter `i` dan `j` pada dua **for()** loops yang masing masingnya untuk counter baris dan kolom yang kan 
+diincrement sebanyak jumlah baris(4) dan kolom(5) pada matriks hasil
+
+``` bash
+key_t key = 1337;
+  int *value;
+
+  int shmid = shmget(key, sizeof(matC), IPC_CREAT | 0666);
+  value = shmat(shmid, NULL, 0);
+
+  int* p = (int *)value;
+
+  memcpy(p, matC, 80);
+
+  shmdt(value);
+```
+* Disini kami membuat shared memory untuk `matriksC` sesuai dengan template pembuatan shared memory yang ada 
+pada modul  
