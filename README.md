@@ -397,8 +397,9 @@ pertama adalah 4x2, dan matriks kedua 2x5. Isi dari matriks didefinisikan di dal
 berisi angka 1-20 (tidak perlu dibuat filter angka).
 * Dan menampilkan matriks hasil perkaliannya ke layar.
 
-
 **Asumsis Soal:**
+Kami mengasumsikan untuk perkalian matriks ini bahwa akan ada variabel yang bisa mengindikasikan baris pertama dan
+kolom pertama pada pengulangan pertama yang dijadikan sebagai counter sesuai dengan syarat perkalian matriks
 
 **Pembahasan:**
 ```bash
@@ -535,12 +536,14 @@ Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blo
 Pada teka teki untuk pilar kedua Norland diminta untuk :
 * membuatlah program C kedua dengan nama "4b.c". Program ini akan mengambil variabel hasil perkalian matriks dari 
 program "4a.c" (program sebelumnya), dan tampilkan hasil matriks tersebut ke layar.
-* Setelah ditampilkan, berikutnya untuk setiap angka dari matriks tersebut, carilah nilai faktorialnya, dan 
+* Setelah ditampilkan, berikutnya untuk setiap angka dari matriks tersebut, carilah nilai penjumlahannya, dan 
 tampilkan hasilnya ke layar dengan format seperti matriks.
-*note*: Mengguankaan shared memory dan mengguanakan thread dalam perhitungan faktorial
+*note*: Mengguankaan shared memory dan mengguanakan thread dalam perhitungan penjumlahan
 
 
 **Asumsi Soal:**
+Kami mengasumsikan bahwa akan dibuat matriks yang akan digunakan sebagai shared memory dan akan dibuat 
+thread untuk setiap nilai dari matriks hasil yang akan berjalan dengan rutin penjumlahan
 
 **Pembahasan:**
 
@@ -555,8 +558,8 @@ tampilkan hasilnya ke layar dengan format seperti matriks.
 ```
 * `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
 * `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
-* `#include <sys/ipc.h>` Library untuk
-* `#include <sys/shm.h>` Library untuk
+* `#include <sys/ipc.h>` Library digunakan untuk tiga mekanisme interprocess communication (IPC)(e.g. semaphore)
+* `#include <sys/shm.h>` Library untuk mendefinisikan symbolic constants structure seperti(SHM_RDONLY,SHMLBA)
 * `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
 * `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
 * `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
@@ -657,6 +660,8 @@ Pada teka teki untuk pilar ketiga Norland diminta untuk :
 *note*: menggunakan IPC Pipes
 
 **Asumsi Soal:**
+Disini kami mengasumsikan untuk melakukan fork dimana parent process akan menjadi `write end`  dari pipe dan child
+akan menjadi `read end` dari output parrent proccess
 
 **Pembahasan:**
 ```bash
@@ -672,7 +677,7 @@ Pada teka teki untuk pilar ketiga Norland diminta untuk :
 * `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
 * `#include <sys/types.h> `Library tipe data khusus (e.g. pid_t)
 * `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
-* `#include<sys/wait.h> `Library untuk
+* `#include<sys/wait.h> `Library untuk pendefinisian symbolic constants untuk penggunaan waitpid(): (e.g. WNOHANG)
 
 ```bash
 int main() {
