@@ -9,6 +9,8 @@ Kelompok T08
 * [Soal 3](#soal-3)
 * [Soal 4](#soal-4)
   * [soal 4 a](#soal-4.a.)
+  * [soal 4 b](#soal-4.b.)
+  * [soal 4 c](#soal-4.c.)
 
  
 ---
@@ -365,7 +367,7 @@ keempatnya kami mengguanakan `test` yang tadi sudah menyimpan dahulu absolut pat
 * **for()** loop kedua akan men-join setiap thread yang sudah dibuat  
 
 **Kesulitan:**  
-Tidak ada. Dindra bukan apes, he`s speaking languange of the gods
+Tidak ada.
 
 **ScreenShot**  
 
@@ -380,14 +382,14 @@ Tidak ada. Dindra bukan apes, he`s speaking languange of the gods
 
 
 ## Soal 4
-Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal3/soal3.c)
+Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal4/soal4a.c)
 
 **Deskripsi:**
 Norland mendapati ada sebuah tiga teka-teki yang tertulis di tiga pilar berbeda. Untuk dapat mengambil batu mulia 
 di suatu pilar, Ia harus memecahkan teka-teki yang ada di pilar tersebut. Norland menghampiri setiap pilar secara 
 bergantian. 
 
-### **Soal 4.a.**
+## **Soal 4.a.**
 **Deskripsi:**
 Pada teka teki untuk pilar pertama Norland diminta untuk :
 *  Membuat program C dengan nama "4a.c", yang berisi program untuk melakukan perkalian matriks. Ukuran matriks 
@@ -410,8 +412,8 @@ berisi angka 1-20 (tidak perlu dibuat filter angka).
 ```
 * `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
 * `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
-* `#include <sys/ipc.h>` Library untuk
-* `#include <sys/shm.h>` Library untuk
+* `#include <sys/ipc.h>` Library digunakan untuk tiga mekanisme interprocess communication (IPC)(e.g. semaphore)
+* `#include <sys/shm.h>` Library untuk mendefinisikan symbolic constants structure seperti(SHM_RDONLY,SHMLBA)
 * `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
 * `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
 * `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
@@ -442,6 +444,7 @@ struct args {
 ```
 * Lalu kami mendefinisikan `struct` dengan member `i` sebgai baris dan `j` sebagai kolom 
 
+***fungsi kali***
 ``` bash
 void *kali(void* arg) {
   int i = ((struct args*)arg)->i;
@@ -481,11 +484,12 @@ int main() {
     }
   }
 ```
-* Pada main, pertama-tama kami mendefinisikan `tid` dari `thread` dengan jumlah ordo matriks hasil, dan sebuah 
-`struct` yang berisi atribut `index`  
+* Pada **main()**, pertama-tama kami mendefinisikan `tid` dari `thread` dengan jumlah ordo matriks hasil, dan 
+sebuah `struct` yang berisi atribut `index`  
 * **for()** pertama adalah sebagai looping untuk indikasi baris dan **for()** kedua sebagai loopinh indikasi kolom
 yang setiap indikasi baris dan kolom tersbeut akan diset ke `i` dan `j`
-* Disini `thread` akan dibuat dengan **pthread_create(&tid[i][j], NULL, &kali, (void *)index)** dan berjalan dengan `tid` `i` dan `j` yang di increment setiap perulangannya
+* Disini `thread` akan dibuat dengan **pthread_create(&tid[i][j], NULL, &kali, (void *)index)** dan berjalan dengan 
+`tid` `i` dan `j` yang di increment setiap perulangannya
 * `thread` akan menjalankan fungsi `kali` sebagai routine dengan atribut `index` sebagai variabel yang digunakan   
 * Selanjutnya kami men-join setiap `thread` yang sudah dibuat dengan **pthread_join(tid[i][j], NULL)**
 
@@ -516,4 +520,201 @@ key_t key = 1337;
   shmdt(value);
 ```
 * Disini kami membuat shared memory untuk `matriksC` sesuai dengan template pembuatan shared memory yang ada 
-pada modul  
+pada modul, karena nanti `matriksC `akan digunakan untuk acuan dari soal 4.b   
+
+**Kesulitan:**
+Tidak ada.
+
+**Screenshot:**
+
+
+## **Soal 4.b.**
+Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal4/soal4b.c)
+
+**Deskripsi:**
+Pada teka teki untuk pilar kedua Norland diminta untuk :
+* membuatlah program C kedua dengan nama "4b.c". Program ini akan mengambil variabel hasil perkalian matriks dari 
+program "4a.c" (program sebelumnya), dan tampilkan hasil matriks tersebut ke layar.
+* Setelah ditampilkan, berikutnya untuk setiap angka dari matriks tersebut, carilah nilai faktorialnya, dan 
+tampilkan hasilnya ke layar dengan format seperti matriks.
+*note*: Mengguankaan shared memory dan mengguanakan thread dalam perhitungan faktorial
+
+
+**Asumsi Soal:**
+
+**Pembahasan:**
+
+```bash
+#include <stdio.h>
+#include <pthread.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+```
+* `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
+* `#include <pthread.h>` Library untuk operasi thread (e.g. pthread_create(), ptrhead_exit() )
+* `#include <sys/ipc.h>` Library untuk
+* `#include <sys/shm.h>` Library untuk
+* `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
+* `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
+* `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
+
+``` bash
+int matrix[4][5];
+long hasil[4][5];
+
+struct args {
+  int i;
+  int j;
+};
+```
+* Pertama kami membuat array dan matriks dengan ordo sesuai dengan output matriks soal 3  
+* Mendefinisikan `struct` dengan atribut `i` dan `j` yang nanti digunakan sebagai baris dan kolom
+
+***fungsi Penjumlahan***
+``` bash
+void *factorial(void* arg) {
+  int i = ((struct args*)arg)->i;
+  int j = ((struct args*)arg)->j;
+  long hasilEl = 1;
+  for (int n = 1; n <= matrix[i][j]; n++) hasilEl += (long)n;
+  hasil[i][j] = hasilEl;
+}
+```
+* Pendefinisian fungsi `penjumalah` dengan pembuatan `struct` yang akan menset atribut `i` dan `j` nya keadalam 
+variable `i` dan `j`
+* **For()** loops disini akan berjalan dengan counter `n` yang akan di increment untuk setiap baris dan kolom dari 
+matriks, dan akan menjumlahkan counter kedalam `hasilEl` untuk setiap perulangannya
+
+```bash
+int main() {
+  key_t key = 1337;
+  int *value;
+  int shmid = shmget(key, 80, IPC_CREAT | 0666);
+  value = shmat(shmid, NULL, 0);
+
+  int* p = (int *)value;
+  memcpy(matrix, p, 80);
+
+  shmdt(value);
+  shmctl(shmid, IPC_RMID, NULL);
+```
+* Pada **main()**, pertama-tama kami akan membuat shared memory untuk `matrix`, sesuai dengan template pembuatan shared memory yang ada pada modul
+
+``` bash
+ for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      struct args *index = (struct args *)malloc(sizeof(struct args));
+      index->i = i;
+      index->j = j;
+      pthread_create(&tid[i][j], NULL, &factorial, (void *)index);
+    }
+  }
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      pthread_join(tid[i][j], NULL);
+    }
+```
+* **for()** loop pertama adalah sebagai looping untuk indikasi baris dan **for()** kedua sebagai loopinh indikasi 
+kolom yang setiap indikasi baris dan kolom tersbeut akan diset ke `i` dan `j`
+* Disini `thread` akan dibuat dengan **pthread_create(&tid[i][j], NULL, &kali, (void *)index)** dan berjalan dengan 
+`tid` `i` dan `j` yang di increment setiap perulangannya
+* `thread` akan menjalankan fungsi `faktorial` sebagai routine dengan atribut `index` sebagai variabel yang 
+digunakan
+* Selanjutnya kami men-join setiap `thread` yang sudah dibuat dengan **pthread_join(tid[i][j], NULL)**
+
+``` bash
+  printf("Matriks :\n");
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 5; j++) {
+      printf("%20ld", hasil[i][j]);
+    }
+    printf("\n");
+  }
+}
+```
+* Disini program akan menampilkan setiap baris dan kolom dari matriks `hasil[i][j]` menggunakan **for()** loops yang
+dengan counter `i` untuk baris dan `j` untuk kolom, menggunakan **printf("%20ld", hasil[i][j])** dan 
+menampilkan hasil penjumlahan dari setiap matriks hasil, `%ld` disini adalah untuk banyak karakter long yang akan 
+di print dari matriks `hasil[i][j]`
+
+**kesulitan:**
+Tidak ada.
+
+**ScreenShot:**
+
+
+## **Soal 4.c.**
+Source Code : [source](https://github.com/DSlite/SoalShiftSISOP20_modul3_T08/blob/master/soal4/soal4c.c)
+
+**Deskripsi:**
+Pada teka teki untuk pilar ketiga Norland diminta untuk :
+* Memebuat program C ketiga dengan nama "4c.c".
+* Pada program ini, Norland diminta mengetahui jumlah file dan folder di direktori saat ini dengan command "ls | wc 
+-l"
+*note*: menggunakan IPC Pipes
+
+**Asumsi Soal:**
+
+**Pembahasan:**
+```bash
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<string.h>
+#include<sys/wait.h>
+```
+* `#include <stdio.h>` Library untuk fungsi input-output (e.g. printf(), sprintf())
+* `#include <stdlib.h>` Library untuk fungsi umum (e.g. exit(), atoi())
+* `#include <unistd.h>` Llibrary untuk melakukan system call kepada kernel linux (e.g. fork())
+* `#include <sys/types.h> `Library tipe data khusus (e.g. pid_t)
+* `#include <string.h>` Library untuk pendefinisian berbagai fungsi untuk manipulasi array karakter (e.g. strtok())
+* `#include<sys/wait.h> `Library untuk
+
+```bash
+int main() {
+  int fd[2];
+
+  pid_t pid;
+
+  pipe(fd);
+```
+* Pertama kami men-set satu `pid`untuk thread dengan **pid_t** dan satu file descriptor  yaitu `fd[2]` dimana 
+fungsinya adalah  
+
+``` bash
+ pid = fork();
+  if (pid == 0) {
+    dup2(fd[1], 1);
+    close(fd[0]);
+    char *argv[] = {"ls", NULL};
+    execv("/bin/ls", argv);
+  }
+  while(wait(NULL) > 0);
+```
+* Disini akan dilakukan **fork()** dan untuk parrent proccesnya, dia akan membuat copy `fd[1]` yang berfungsi
+sebgai `write` end dari `pipe` 
+* Selanjutnya `ls` akan dijalankan pertama untuk menampilkan semua `dir` dan `file` yang ada dan disimpan dalam
+pointer `*argv` yang nantinya akan di `execv` pada `/bin/ls` sehingga parrent procces hanya berjalan sekali
+* Child Proccess dibuat menunggu hingga parrent selesai menggunakan **while(wait(NULL) > 0)** 
+
+``` bash
+dup2(fd[0], 0);
+  close(fd[1]);
+  char *argv[] = {"wc", "-l", NULL};
+  execv("/usr/bin/wc", argv);
+}
+```
+* Disini **dup2** dijalankan kembali dengan `fd[0]` yang artinya akan menjadi sebgai input atau `read` end dari pipe
+baru akan dilakukan perintah `wc` `-l` yang berfungsi untuk menampilkan seluruh jumlah file dan folder yang ada 
+pada direcotry, dan akan di set terlebih dahulu kedalam pointer `*argv[]` selanjutnya
+* `wc``-l` yang ada di dalam pointer `*argv[]` tadi akan di execv menggunakan **execv("/usr/bin/wc", argv)** 
+sehingga child proccess hanya berjalan sekali
+
+**Kesulitan:**
+Tidak ada.
+
+**Screenshot:**
